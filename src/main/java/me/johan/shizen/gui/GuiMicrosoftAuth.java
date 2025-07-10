@@ -105,7 +105,7 @@ public class GuiMicrosoftAuth extends GuiScreen {
             }
           }
           Shizen.accounts.add(acc);
-          Shizen.save();
+          Shizen.saveAccounts();
           SessionManager.set(session);
           success = true;
         })

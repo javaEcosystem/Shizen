@@ -1,13 +1,18 @@
 package me.johan.shizen;
 
 import com.google.gson.*;
+
 import me.johan.shizen.auth.Account;
 import me.johan.shizen.utils.SSLUtils;
+
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import org.lwjgl.input.Keyboard;
 
 import javax.net.ssl.SSLContext;
 import java.io.*;
@@ -17,15 +22,23 @@ import java.util.Optional;
 @Mod(modid = "shizen", version = "@VERSION@", clientSideOnly = true, acceptedMinecraftVersions = "1.8.9")
 public class Shizen {
 
+  public static final ArrayList<Account> accounts = new ArrayList<>();
   private static final Minecraft mc = Minecraft.getMinecraft();
   private static final File file = new File(mc.mcDataDir, "accounts.json");
   private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
-  public static final ArrayList<Account> accounts = new ArrayList<>();
+  public static final KeyBinding playerHitboxKey = new KeyBinding("Toggle Players Hitbox", Keyboard.KEY_UP, "Shizen");
+  public static final KeyBinding itemHitboxKey = new KeyBinding("Toggle Items Hitbox", Keyboard.KEY_DOWN, "Shizen");
 
   @EventHandler
   public static void init(FMLInitializationEvent event) {
     SSLContext ignored = SSLUtils.getSSLContext();
+
+    // listen to @SubscribeEvents
     MinecraftForge.EVENT_BUS.register(new Events());
+
+    // register keybindings
+    ClientRegistry.registerKeyBinding(playerHitboxKey);
+    ClientRegistry.registerKeyBinding(itemHitboxKey);
 
     if (!file.exists()) {
       try {
@@ -40,7 +53,7 @@ public class Shizen {
     }
   }
 
-  public static void load() {
+  public static void loadAccounts() {
     accounts.clear();
     try {
       JsonElement json = new JsonParser().parse(
@@ -63,7 +76,7 @@ public class Shizen {
     }
   }
 
-  public static void save() {
+  public static void saveAccounts() {
     try {
       JsonArray jsonArray = new JsonArray();
       for (Account account : accounts) {

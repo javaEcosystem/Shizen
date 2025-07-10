@@ -42,7 +42,7 @@ public class GuiAccountManager extends GuiScreen {
 
   @Override
   public void initGui() {
-    Shizen.load();
+    Shizen.loadAccounts();
     Keyboard.enableRepeatEvents(true);
 
     buttonList.clear();
@@ -135,7 +135,7 @@ public class GuiAccountManager extends GuiScreen {
           --selectedAccount;
           if (isCtrlKeyDown()) {
             Collections.swap(Shizen.accounts, selectedAccount, selectedAccount + 1);
-            Shizen.save();
+            Shizen.saveAccounts();
           }
         }
       }
@@ -145,7 +145,7 @@ public class GuiAccountManager extends GuiScreen {
           ++selectedAccount;
           if (isCtrlKeyDown()) {
             Collections.swap(Shizen.accounts, selectedAccount, selectedAccount - 1);
-            Shizen.save();
+            Shizen.saveAccounts();
           }
         }
       }
@@ -193,7 +193,7 @@ public class GuiAccountManager extends GuiScreen {
               .handle((session, error) -> {
                 if (session != null) {
                   account.setUsername(session.getUsername());
-                  Shizen.save();
+                  Shizen.saveAccounts();
                   SessionManager.set(session);
                   notification = new Notification(TextFormatting.translate(String.format(
                     "&aSuccessful login! (%s)&r", account.getUsername()
@@ -243,7 +243,7 @@ public class GuiAccountManager extends GuiScreen {
                 account.setRefreshToken(refreshToken.get());
                 account.setAccessToken(accessToken.get());
                 account.setUsername(session.getUsername());
-                Shizen.save();
+                Shizen.saveAccounts();
                 SessionManager.set(session);
                 notification = new Notification(TextFormatting.translate(String.format(
                   "&aSuccessful login! (%s)&r", account.getUsername()
@@ -267,7 +267,7 @@ public class GuiAccountManager extends GuiScreen {
         case 2: { // Delete
           if (selectedAccount > -1 && selectedAccount < Shizen.accounts.size()) {
             Shizen.accounts.remove(selectedAccount);
-            Shizen.save();
+            Shizen.saveAccounts();
             selectedAccount = -1;
             updateScreen();
           }
