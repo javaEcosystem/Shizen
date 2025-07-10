@@ -1,0 +1,13 @@
+[
+  {
+    "modid": "shizen",
+    "name": "Shizen",
+    "description": "A mod that allows you to switch between Microsoft accounts in-game.",
+    "version": "${version}",
+    "mcversion": "${mcversion}",
+    "url": "https://github.com/javaEcosystem/Shizen",
+    "authorList": [
+      "johan"
+    ]
+  }
+]
